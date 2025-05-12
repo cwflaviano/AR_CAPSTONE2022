@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class KinectStreams : MonoBehaviour
 {
-    public KinectConfig KinectConfig;
+    [SerializeField] private KinectConfig KinectConfig;
 
     // returns the raw depth/user data, if ComputeUserMap is true
     public ushort[] GetRawDepthMap()

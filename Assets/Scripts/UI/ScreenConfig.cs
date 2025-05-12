@@ -6,13 +6,15 @@ using UnityEngine.UI;
 public class ScreenConfig : MonoBehaviour
 {
     // set screen resolution
-    public Vector2 SetResolution(RawImage textureScreen, float scale, int rawImageWidth, int rawImageHeight)
+    public Vector2 SetResolution(RawImage textureScreen, float scale, int rawImageWidth, int rawImageHeight, int posY)
     {
         textureScreen.transform.localScale = new Vector3(1f, -1f, 1f);
         if (scale < 0 || scale > 10) scale = 1;
 
+        textureScreen.rectTransform.anchoredPosition = new Vector2(0, posY);
         return textureScreen.rectTransform.sizeDelta = ScaleFactor(scale, rawImageWidth, rawImageHeight);
     }
+
 
     private Vector2 ScaleFactor(float scale, int rawImageWidth, int rawImageHeight)
     {

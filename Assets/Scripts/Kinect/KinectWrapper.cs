@@ -26,14 +26,20 @@ public class KinectWrapper
 		
 		public const float NuiDepthHorizontalFOV = 58.5f;
 		public const float NuiDepthVerticalFOV = 45.6f;
-		
+
 		public const int ColorImageWidth = 640;
 		public const int ColorImageHeight = 480;
+		//public const int ColorImageWidth = 1280;
+		//public const int ColorImageHeight = 960;
 		public const NuiImageResolution ColorImageResolution = NuiImageResolution.resolution640x480;
-		
+		//public const NuiImageResolution ColorImageResolution = NuiImageResolution.resolution1280x960;
+
 		public const int DepthImageWidth = 640;
 		public const int DepthImageHeight = 480;
+		//public const int DepthImageWidth = 1280;
+		//public const int DepthImageHeight = 960;
 		public const NuiImageResolution DepthImageResolution = NuiImageResolution.resolution640x480;
+		//public const NuiImageResolution DepthImageResolution = NuiImageResolution.resolution1280x960;
 		
 		public const bool IsNearMode = false;
 		
@@ -93,6 +99,7 @@ public class KinectWrapper
         ElbowRight = 9,
         WristRight = 10,
         HandRight = 11,
+
         HipLeft = 12,
         KneeLeft = 13,
         AnkleLeft = 14,

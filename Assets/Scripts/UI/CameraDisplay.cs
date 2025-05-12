@@ -7,10 +7,12 @@ public class CameraDisplay : MonoBehaviour
 {
     public ScreenConfig ScreenConfig;
 
+    public Camera mainCamera;
     public RawImage screen;
     [SerializeField] private float scale = 1.69f;
     [SerializeField] public int rawImageWidth = 640;
     [SerializeField] public int rawImageHeight = 480;
+    [SerializeField] public int posY = 153;
 
     [HideInInspector] public Vector2 ScreenResolution;
     [HideInInspector] public bool isScreenResolutionUpdated = false;
@@ -32,7 +34,7 @@ public class CameraDisplay : MonoBehaviour
         {
             prevScale = scale;
             isScreenResolutionUpdated = true;
-            ScreenResolution = ScreenConfig.SetResolution(screen, scale, rawImageWidth, rawImageHeight);
+            ScreenResolution = ScreenConfig.SetResolution(screen, scale, rawImageWidth, rawImageHeight, posY);
             return;
         }
         else

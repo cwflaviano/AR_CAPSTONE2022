@@ -15,6 +15,8 @@ public class KinectManager : MonoBehaviour
 
     [Header("UI SCRIPTS")]
     [SerializeField] private CameraDisplay CameraDisplay;
+    [SerializeField] private Debugging Debugging;
+
 
     private void Awake()
     {
@@ -54,6 +56,7 @@ public class KinectManager : MonoBehaviour
         if(KinectSystem.IsInitialized())
         {
             CameraDisplay.DisplayCameraFeed(KinectStreams);
+            ClothManager.SetModelPos();
         }
     }
 
@@ -70,12 +73,32 @@ public class KinectManager : MonoBehaviour
 
             KinectStreams.UseUserMap();
             KinectStreams.UseColorMap();
-            KinectTracking.PollSkeleton();
 
-            //if(!ClothManager.isConfigured)
-            //{
-            //    ClothManager.ManageModels();
-            //}
+            if(KinectConfig.StartTracking)
+            {
+                Debugging.text4.color = Color.gray;
+                Debugging.text4.text = "Body Tracking is Enabled";
+
+                KinectTracking.PollSkeleton(); // body tracking logic
+
+                if(KinectConfig.userCalibrated)
+                {
+                    //if (!ClothManager.TopGarments.model.activeSelf)
+                    //    ClothManager.SetModelActive();
+                    ClothManager.UpdateModelPositionAndScale();
+                    ClothManager.UpdateModelRotation();
+                    ClothManager.UpdateJoints();
+                }
+                else
+                {
+                    ClothManager.SetModelNotActive();
+                }
+            }
+            else
+            {
+                Debugging.text4.color = Color.red;
+                Debugging.text4.text = "Body Tracking is disabled";
+            }
         }
     }
 }

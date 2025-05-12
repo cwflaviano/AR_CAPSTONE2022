@@ -7,9 +7,12 @@ using UnityEngine.SceneManagement;
 
 public class KinectSystem : MonoBehaviour
 {
-    public KinectConfig KinectConfig;
+    [SerializeField] private KinectConfig KinectConfig;
     [SerializeField] private KinectStreams KinectStreams;
     [SerializeField] private CameraDisplay CameraDisplay;
+
+    private int sensorAngleCache;
+
 
     // initialize kinect device and necessary functions
     public void KinectInitialization()
@@ -166,8 +169,12 @@ public class KinectSystem : MonoBehaviour
     // set kinect device dcamera elevation angle. max of 27 min of -27
     public void SetKinectSensorElevationAngle(int SensorAngle)
     {
-        KinectConfig.SensorAngle = SensorAngle;
-        KinectWrapper.NuiCameraElevationSetAngle(SensorAngle);
+        if(sensorAngleCache != SensorAngle)
+        {
+            if (SensorAngle < -27 || SensorAngle > 27) SensorAngle = 0;
+            KinectConfig.SensorAngle = SensorAngle;
+            KinectWrapper.NuiCameraElevationSetAngle(SensorAngle);
+        }
     }
 
 

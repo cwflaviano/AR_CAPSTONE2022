@@ -23,6 +23,7 @@ public class KinectConfig : MonoBehaviour
 
     // depth sensing / bone tracking
     [Header("TRACKING CONFIG")]
+    public bool StartTracking = true;
     public float MinUserDistance = 1.0f;
     public float MaxUserDistance = 3.0f;
     public bool DetectClosestUser = true;
@@ -34,7 +35,7 @@ public class KinectConfig : MonoBehaviour
     public bool UseBoneOrientationsFilter = true;
     public bool UseClippedLegsFilter = true;
     public bool UseBoneOrientationsConstraint = true;
-    public bool UseSelfIntersectionConstraint = false;
+    public bool UseSelfIntersectionConstraint = true;
 
     // skeleton / bones / joints
     public KinectWrapper.NuiSkeletonFrame skeletonFrame;
@@ -49,6 +50,11 @@ public class KinectConfig : MonoBehaviour
     public SelfIntersectionConstraint selfIntersectionConstraint;
     public float lastNuiTime;
 
+    //[Header("CLOTH TYPE")]
+    //public bool useGarments = false;
+    //public bool top = false;
+    //public bool bottom = false;
+
     // Skeleton tracking states, positions and joints' orientations
     [HideInInspector] public Vector3 userPos;
     [HideInInspector] public Matrix4x4 userOri;
@@ -60,17 +66,26 @@ public class KinectConfig : MonoBehaviour
 
     [HideInInspector] public Matrix4x4 kinectToWorld, flipMatrix;
 
+    // kinet initalization
     [HideInInspector] public bool KinectInitialized = false;
+
+    // Body/skeleton/user tracking configs
     [HideInInspector] public bool userCalibrated = false;
 
     [HideInInspector] public uint userID;
     [HideInInspector] public uint userTrackedIndex;
+    [HideInInspector] public uint userIndexes;
+
     [HideInInspector] public int userIndex;
     [HideInInspector] public float userDistance;
     [HideInInspector] public Vector3 skeletonPos;
 
+    [HideInInspector] public uint[] trackUserIDs;
+    [HideInInspector] public Dictionary<uint, KinectWrapper.NuiSkeletonData> userSkeletonData = new Dictionary<uint, KinectWrapper.NuiSkeletonData>();
+    
     [HideInInspector] public const int stateTracked = (int)KinectWrapper.NuiSkeletonPositionTrackingState.Tracked;
     [HideInInspector] public const int stateNotTracked = (int)KinectWrapper.NuiSkeletonPositionTrackingState.NotTracked;
+
 
     /// <summary>
     /// STREAMS - COLOR STREAMS, DEPTH STREAMS
