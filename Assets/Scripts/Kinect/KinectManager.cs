@@ -81,18 +81,18 @@ public class KinectManager : MonoBehaviour
 
                 KinectTracking.PollSkeleton(); // body tracking logic
 
-                if(KinectConfig.userCalibrated)
-                {
-                    //if (!ClothManager.TopGarments.model.activeSelf)
-                    //    ClothManager.SetModelActive();
-                    ClothManager.UpdateModelPositionAndScale();
-                    ClothManager.UpdateModelRotation();
-                    ClothManager.UpdateJoints();
-                }
-                else
-                {
-                    ClothManager.SetModelNotActive();
-                }
+                //if(KinectConfig.userCalibrated)
+                //{
+                //    //if (!ClothManager.TopGarments.model.activeSelf)
+                //    //    ClothManager.SetModelActive();
+                //    ClothManager.UpdateModelPositionAndScale();
+                //    ClothManager.UpdateModelRotation();
+                //    ClothManager.UpdateJoints();
+                //}
+                //else
+                //{
+                //    ClothManager.SetModelNotActive();
+                //}
             }
             else
             {
