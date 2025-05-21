@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static SizingAndMeasurement;
 
 public class KinectManager : MonoBehaviour
 {
@@ -11,7 +12,11 @@ public class KinectManager : MonoBehaviour
     [SerializeField] private KinectSystem KinectSystem;
     [SerializeField] private KinectTracking KinectTracking;
     [SerializeField] private KinectStreams KinectStreams;
-    [SerializeField] private ClothManager ClothManager;
+    [SerializeField] private SizingAndMeasurement SizingAndMeasurement;
+
+
+    [Header("MODEL SCRIPTS")]
+    [SerializeField] private KinectClothAugmenter KinectClothAugmenter;
 
     [Header("UI SCRIPTS")]
     [SerializeField] private CameraDisplay CameraDisplay;
@@ -40,13 +45,15 @@ public class KinectManager : MonoBehaviour
             Debug.LogError("[CRITICAL] KinectConfig is not assigned in the inspector");
             return;
         }
-        if (ClothManager == null)
+        if (KinectClothAugmenter == null)
         {
-            Debug.LogError("[CRITICAL] ClothManager is not assigned in the inspector");
+            Debug.LogError("[CRITICAL] KinectClothAugmenter is not assigned in the inspector");
             return;
         }
-        
+
         KinectSystem.KinectInitialization();
+
+        DontDestroyOnLoad(gameObject);
     }
 
     private void Start()
@@ -55,8 +62,11 @@ public class KinectManager : MonoBehaviour
 
         if(KinectSystem.IsInitialized())
         {
-            CameraDisplay.DisplayCameraFeed(KinectStreams);
-            ClothManager.SetModelPos();
+            CameraDisplay.DisplayCameraFeed(KinectStreams); // display camera feed
+
+            // position model container and model
+            KinectClothAugmenter.DefaultPositionModelContainer();
+            KinectClothAugmenter.DefaultPositionModel();
         }
     }
 
@@ -65,40 +75,47 @@ public class KinectManager : MonoBehaviour
     {
         if (KinectSystem.IsInitialized())
         {
+            // camera display settings 
             CameraDisplay.SetResolution();
+            CameraDisplay.UpdateXPOS();
+            // kinect sensor angle setting
             KinectSystem.SetKinectSensorElevationAngle(KinectConfig.SensorAngle);
 
+            // checks if raw image resolution changed
             if (CameraDisplay.isScreenResolutionUpdated)
                 Debug.Log($"[LOG] New Resolution: {(int)CameraDisplay.ScreenResolution.x} x {(int)CameraDisplay.ScreenResolution.y}");
 
+            // keeps checking if will use camera feed and depth sensing
             KinectStreams.UseUserMap();
             KinectStreams.UseColorMap();
 
+            
             if(KinectConfig.StartTracking)
             {
-                Debugging.text4.color = Color.gray;
-                Debugging.text4.text = "Body Tracking is Enabled";
-
                 KinectTracking.PollSkeleton(); // body tracking logic
 
-                //if(KinectConfig.userCalibrated)
-                //{
-                //    //if (!ClothManager.TopGarments.model.activeSelf)
-                //    //    ClothManager.SetModelActive();
-                //    ClothManager.UpdateModelPositionAndScale();
-                //    ClothManager.UpdateModelRotation();
-                //    ClothManager.UpdateJoints();
-                //}
-                //else
-                //{
-                //    ClothManager.SetModelNotActive();
-                //}
+                if (KinectConfig.userCalibrated)
+                {
+                    KinectClothAugmenter.PositionModel(KinectConfig.userID); // update position per frame scaling
+                    if (KinectConfig.SizingSuggestion)
+                    {
+                        string detectedSize = SizingAndMeasurement.DetectSize();
+                        FilipinoSizeProfile sizeProfile = System.Array.Find(SizingAndMeasurement.sizeProfiles, p => p.sizeName == detectedSize);
+                        Vector3 hipPos = KinectTracking.GetJointPosition(KinectConfig.userID, (int)KinectWrapper.NuiSkeletonPositionIndex.HipCenter);
+                        float userDistance = Mathf.Abs(hipPos.z);
+                        Debugging.text5.text = $"Suggested Size: {detectedSize}";
+                        Debug.Log($"Detected size: {detectedSize}, Depth: {userDistance:F2}m");
+                    }
+                }
+                else
+                {
+                    // reposition model 
+                    KinectClothAugmenter.DefaultPositionModelContainer();
+                    KinectClothAugmenter.DefaultPositionModel();
+                }
+
             }
-            else
-            {
-                Debugging.text4.color = Color.red;
-                Debugging.text4.text = "Body Tracking is disabled";
-            }
+
         }
     }
 }

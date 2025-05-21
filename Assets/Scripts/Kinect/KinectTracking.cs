@@ -10,6 +10,7 @@ public class KinectTracking : MonoBehaviour
     [SerializeField] private KinectConfig KinectConfig;
     [SerializeField] private KinectSystem KinectSystem;
     [SerializeField] private KinectStreams KinectStreams;
+    [SerializeField] private KinectClothAugmenter KinectClothAugmenter;
     [SerializeField] private Debugging Debugging;
 
     public void PollSkeleton()
@@ -66,6 +67,8 @@ public class KinectTracking : MonoBehaviour
                 KinectConfig.userID = 0;
                 Debugging.text2.color = Color.yellow;
                 Debugging.text2.text = "User lost - recalibrating...";
+                KinectClothAugmenter.isAugmented = false;
+                Debugging.text5.text = "...";
             }
         }
 
@@ -120,6 +123,7 @@ public class KinectTracking : MonoBehaviour
             // Process calibrated user
             if (KinectConfig.userCalibrated)
             {
+
                 // Use the current user ID (might be existing or newly calibrated)
                 uint currentUserId = KinectConfig.userID;
                 var skeletonData = KinectConfig.userSkeletonData[currentUserId];
@@ -178,6 +182,8 @@ public class KinectTracking : MonoBehaviour
             Debugging.text2.text = "...";
             Debugging.text3.color = Color.white;
             Debugging.text3.text = "...";
+            Debugging.text5.text = "...";
+            KinectClothAugmenter.isAugmented = false;
         }
     }
 

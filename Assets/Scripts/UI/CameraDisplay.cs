@@ -13,7 +13,7 @@ public class CameraDisplay : MonoBehaviour
     [SerializeField] public int rawImageWidth = 640;
     [SerializeField] public int rawImageHeight = 480;
     [SerializeField] public int posY = 153;
-
+    private int cPosY = 0;
     [HideInInspector] public Vector2 ScreenResolution;
     [HideInInspector] public bool isScreenResolutionUpdated = false;
 
@@ -57,4 +57,16 @@ public class CameraDisplay : MonoBehaviour
         screen.transform.localScale = new Vector3(1f, 1f, 1f);
         screen.color = Color.black;
     }
+
+    // update x position of raw image
+    public void UpdateXPOS()
+    {
+        if(cPosY != posY)
+        {
+            cPosY = posY;
+            screen.rectTransform.anchoredPosition = new Vector2(0, cPosY);
+        }
+    }
+
+
 }

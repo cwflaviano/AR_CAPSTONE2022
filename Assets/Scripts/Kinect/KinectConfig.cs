@@ -18,8 +18,12 @@ public class KinectConfig : MonoBehaviour
     /// </summary>
     // device sensor setting
     [Header("SENSOR CONFIG")]
-    public float SensorHeight = 1f;
+    public float SensorHeight = 1.27f;
     public int SensorAngle = 0;
+    public bool SizingSuggestion = true;
+
+    [Header("UNITY CONFIG")]
+    public float mainCameraHeight = 1f;
 
     // depth sensing / bone tracking
     [Header("TRACKING CONFIG")]
@@ -87,13 +91,16 @@ public class KinectConfig : MonoBehaviour
     [HideInInspector] public const int stateNotTracked = (int)KinectWrapper.NuiSkeletonPositionTrackingState.NotTracked;
 
 
+    [HideInInspector] public int minDistance;
+    [HideInInspector] public int maxDistance;
+
     /// <summary>
     /// STREAMS - COLOR STREAMS, DEPTH STREAMS
     ///         - for displaying / visualizing bones
     ///         - or camera feed from kinect device
     /// </summary>
-    // public COMPONENTS
-    [Header("STREAMS CONFIG")]
+   // public COMPONENTS
+   [Header("STREAMS CONFIG")]
     public bool ComputeUserMap = false;
     public bool ComputeColorMap = true;
     public bool DisplayUserMap = false;
