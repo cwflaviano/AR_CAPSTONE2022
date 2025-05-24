@@ -21,6 +21,7 @@ public class KinectManager : MonoBehaviour
     [Header("UI SCRIPTS")]
     [SerializeField] private CameraDisplay CameraDisplay;
     [SerializeField] private Debugging Debugging;
+    [SerializeField] private TryDemo TryDemo;
 
 
     private void Awake()
@@ -75,6 +76,9 @@ public class KinectManager : MonoBehaviour
     {
         if (KinectSystem.IsInitialized())
         {
+            // Adjust kinect
+            TryDemo.AdjustAngle();  
+
             // camera display settings 
             CameraDisplay.SetResolution();
             CameraDisplay.UpdateXPOS();
@@ -97,15 +101,7 @@ public class KinectManager : MonoBehaviour
                 if (KinectConfig.userCalibrated)
                 {
                     KinectClothAugmenter.PositionModel(KinectConfig.userID); // update position per frame scaling
-                    if (KinectConfig.SizingSuggestion)
-                    {
-                        string detectedSize = SizingAndMeasurement.DetectSize();
-                        FilipinoSizeProfile sizeProfile = System.Array.Find(SizingAndMeasurement.sizeProfiles, p => p.sizeName == detectedSize);
-                        Vector3 hipPos = KinectTracking.GetJointPosition(KinectConfig.userID, (int)KinectWrapper.NuiSkeletonPositionIndex.HipCenter);
-                        float userDistance = Mathf.Abs(hipPos.z);
-                        Debugging.text5.text = $"Suggested Size: {detectedSize}";
-                        Debug.Log($"Detected size: {detectedSize}, Depth: {userDistance:F2}m");
-                    }
+                    // logic here to augment model to use boy please...
                 }
                 else
                 {

@@ -20,7 +20,6 @@ public class KinectConfig : MonoBehaviour
     [Header("SENSOR CONFIG")]
     public float SensorHeight = 1.27f;
     public int SensorAngle = 0;
-    public bool SizingSuggestion = true;
 
     [Header("UNITY CONFIG")]
     public float mainCameraHeight = 1f;

@@ -56,8 +56,8 @@ public class SizingAndMeasurement : MonoBehaviour
         Vector3 hipCenter = KinectTracking.GetJointPosition(KinectConfig.userID, (int)KinectWrapper.NuiSkeletonPositionIndex.HipCenter);
 
         // Get depth-compensated measurements
-        float shoulderWidth = GetDepthCompensatedDistance(shoulderLeft, shoulderRight, 1.8f);
-        float torsoHeight = GetDepthCompensatedDistance(shoulderCenter, hipCenter, 1.8f);
+        float shoulderWidth = GetDepthCompensatedDistance(shoulderLeft, shoulderRight, shoulderCenter.z);
+        float torsoHeight = GetDepthCompensatedDistance(shoulderCenter, hipCenter, hipCenter.z);
 
         // Find matching size profile
         foreach (var profile in sizeProfiles)
