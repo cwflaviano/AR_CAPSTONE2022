@@ -10,7 +10,7 @@ public class KinectSystem : MonoBehaviour
     [SerializeField] private KinectConfig KinectConfig;
     [SerializeField] private KinectStreams KinectStreams;
     [SerializeField] private CameraDisplay CameraDisplay;
-
+        
     private int sensorAngleCache;
 
 
@@ -24,7 +24,7 @@ public class KinectSystem : MonoBehaviour
             if (hr != 0)
                 throw new Exception("NuiInitialize Failed");
 
-            hr = KinectWrapper.NuiSkeletonTrackingEnable(IntPtr.Zero, 8);  // 0 = full body, 12 = ??, 8 = seated body tracking/top
+            hr = KinectWrapper.NuiSkeletonTrackingEnable(IntPtr.Zero, 0);  // 0 = full body, 12 = ??, 8 = seated body tracking/top
             if (hr != 0)
                 throw new Exception("Cannot initialize Skeleton Data");
 

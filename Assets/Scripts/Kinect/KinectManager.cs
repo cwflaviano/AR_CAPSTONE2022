@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using static SizingAndMeasurement;
 
 public class KinectManager : MonoBehaviour
 {
@@ -12,13 +12,14 @@ public class KinectManager : MonoBehaviour
     [SerializeField] private KinectSystem KinectSystem;
     [SerializeField] private KinectTracking KinectTracking;
     [SerializeField] private KinectStreams KinectStreams;
-    [SerializeField] private SizingAndMeasurement SizingAndMeasurement;
 
 
     [Header("MODEL SCRIPTS")]
     [SerializeField] private KinectClothAugmenter KinectClothAugmenter;
+    [SerializeField] private SceneController SceneController;
 
     [Header("UI SCRIPTS")]
+    [SerializeField] private Button BackToMainMenu;
     [SerializeField] private CameraDisplay CameraDisplay;
     [SerializeField] private Debugging Debugging;
     [SerializeField] private TryDemo TryDemo;
@@ -51,17 +52,22 @@ public class KinectManager : MonoBehaviour
             Debug.LogError("[CRITICAL] KinectClothAugmenter is not assigned in the inspector");
             return;
         }
-
+        if (KinectTracking == null)
+        {
+            Debug.LogError("[CRITICAL] KinectTracking is not assigned in the inspector");
+            return;
+        }
+        
+        // Initialze kinect
         KinectSystem.KinectInitialization();
-
-        DontDestroyOnLoad(gameObject);
     }
 
     private void Start()
     {
         CameraDisplay.ConfigureScreen();
+        BackToMainMenu.onClick.AddListener(() => { SceneController.OpenMainMenuScene(); });
 
-        if(KinectSystem.IsInitialized())
+        if (KinectSystem.IsInitialized())
         {
             CameraDisplay.DisplayCameraFeed(KinectStreams); // display camera feed
 
@@ -100,8 +106,13 @@ public class KinectManager : MonoBehaviour
 
                 if (KinectConfig.userCalibrated)
                 {
-                    KinectClothAugmenter.PositionModel(KinectConfig.userID); // update position per frame scaling
-                    // logic here to augment model to use boy please...
+                    // augmention
+                    KinectClothAugmenter.PositionModel(); // update position per frame scaling
+                    //float shoulder = KinectClothAugmenter.CalculateShoulderWidth(KinectConfig.userID, KinectWrapper.NuiSkeletonPositionIndex.ShoulderLeft, KinectWrapper.NuiSkeletonPositionIndex.ShoulderRight);
+                    //float height = KinectClothAugmenter.CalculateHeight(KinectConfig.userID, KinectWrapper.NuiSkeletonPositionIndex.Head, KinectWrapper.NuiSkeletonPositionIndex.FootLeft, KinectWrapper.NuiSkeletonPositionIndex.FootRight);
+                    //float chest = KinectClothAugmenter.EstimateChest(shoulder); // Or use manual input
+                    //string size = KinectClothAugmenter.RecommendSize(shoulder, height, chest);
+                    //Debug.Log($"Recommended Size: {size}\nEstimatedChest: {chest}\nEstemated Height: {height}\nDistance shoulder to shoulder: {shoulder}");
                 }
                 else
                 {

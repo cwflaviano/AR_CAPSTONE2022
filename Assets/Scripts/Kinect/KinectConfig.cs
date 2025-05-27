@@ -53,11 +53,6 @@ public class KinectConfig : MonoBehaviour
     public SelfIntersectionConstraint selfIntersectionConstraint;
     public float lastNuiTime;
 
-    //[Header("CLOTH TYPE")]
-    //public bool useGarments = false;
-    //public bool top = false;
-    //public bool bottom = false;
-
     // Skeleton tracking states, positions and joints' orientations
     [HideInInspector] public Vector3 userPos;
     [HideInInspector] public Matrix4x4 userOri;
